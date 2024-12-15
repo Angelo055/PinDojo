@@ -10,7 +10,7 @@ const settings = storeToRefs(store).settings;
 
 const props = defineProps<{
   hints?: string[];
-  validSeq?: (_: [string?, string?]) => boolean;
+  validSeq?: (_: [string?, string?, string?, string?]) => boolean;
 }>();
 
 const pressingKeys = ref(new Set<string>());
@@ -47,8 +47,16 @@ function pressKey(key: string) {
 }
 
 function send() {
-  if (props.validSeq?.([keySeq.value.at(0), keySeq.value.at(1)])) {
-    keySeq.value = [];
+  const isMoqiMode = settings.value.enableMoqiCode;
+  if (isMoqiMode) {
+    const [lead, follow, firstShape, lastShape] = keySeq.value;
+    if (props.validSeq?.([lead, follow, firstShape, lastShape])) {
+      keySeq.value = [];
+    }
+  } else {
+    if (props.validSeq?.([keySeq.value.at(0), keySeq.value.at(1)])) {
+      keySeq.value = [];
+    }
   }
 }
 
@@ -60,15 +68,21 @@ function releaseKey(key: string, shouldSend = true) {
     return send();
   }
 
+  // 如果不需要发送或按键无效,直接返回
   if (!shouldSend || !store.mode().groupByKey.has(key as Char)) {
     return;
   }
 
-  if (keySeq.value.length <= 2) {
+  const isMoqiMode = settings.value.enableMoqiCode;
+  const maxLen = isMoqiMode ? 4 : 2;
+
+  // 累积按键序列
+  if (keySeq.value.length < maxLen) {
     keySeq.value.push(key);
   }
 
-  if (keySeq.value.length > 2) {
+  // 处理超长输入
+  if (keySeq.value.length > maxLen) {
     if (settings.value.enableAutoClear) {
       keySeq.value = [key];
     } else {

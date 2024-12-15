@@ -74,6 +74,7 @@ interface Settings {
   enableKeyHint: boolean; // 按键提示
   enablePinyinHint: boolean; // 拼音提示
   enableAutoClear: boolean; // 自动清空
+  enableMoqiCode: boolean; // 墨奇辅助
   shuangpinMode: ShuangpinType;
 }
 

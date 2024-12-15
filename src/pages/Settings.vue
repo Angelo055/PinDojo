@@ -39,6 +39,7 @@ const settingOptions: {
   enableAutoClear: buildBooleanOption("自动清空"),
   enableKeyHint: buildBooleanOption("键位提示"),
   enablePinyinHint: buildBooleanOption("拼音提示"),
+  enableMoqiCode: buildBooleanOption("墨奇辅助"),
   theme: {
     options: [
       { option: "auto", name: "自动" },

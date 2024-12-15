@@ -5,6 +5,8 @@ import { hanziList } from '../utils/hanzi'
 function nextChar() {
   const index = Math.floor(Math.random() * hanziList.hanzi.length)
 
+  // return '像'
+  // return "罐"
   return hanziList.hanzi[index]
 }
 
