@@ -11,6 +11,7 @@ const settings = storeToRefs(store).settings;
 const props = defineProps<{
   hints?: string[];
   validSeq?: (_: [string?, string?, string?, string?]) => boolean;
+  isBujianMode?: boolean;
 }>();
 
 const pressingKeys = ref(new Set<string>());
@@ -48,7 +49,14 @@ function pressKey(key: string) {
 
 function send() {
   const isMoqiMode = settings.value.enableMoqiCode;
-  if (isMoqiMode) {
+  const isBujianMode = props.isBujianMode;
+
+  if (isBujianMode) {
+    const [key] = keySeq.value;
+    if (props.validSeq?.([key])) {
+      keySeq.value = [];
+    }
+  } else if (isMoqiMode) {
     const [lead, follow, firstShape, lastShape] = keySeq.value;
     if (props.validSeq?.([lead, follow, firstShape, lastShape])) {
       keySeq.value = [];
@@ -74,7 +82,15 @@ function releaseKey(key: string, shouldSend = true) {
   }
 
   const isMoqiMode = settings.value.enableMoqiCode;
-  const maxLen = isMoqiMode ? 4 : 2;
+  const isBujianMode = props.isBujianMode;
+
+  // 根据不同模式确定最大长度
+  let maxLen = 2; // 默认双拼模式
+  if (isMoqiMode) {
+    maxLen = 4; // 墨奇模式
+  } else if (isBujianMode) {
+    maxLen = 1; // 部件模式
+  }
 
   // 累积按键序列
   if (keySeq.value.length < maxLen) {

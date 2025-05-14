@@ -36,6 +36,8 @@ export interface SingleModeProps {
   hanziList?: string[];
   onValidInput?: (result: boolean) => void;
   mode?: "Lead" | "Follow";
+  isBujianMode?: boolean;
+  getBujianPinyin?: (bujian: string) => string[];
 }
 
 // 获取下一个练习汉字
@@ -126,14 +128,23 @@ onDeactivated(() => {
 const currentMap = computed(() => {
   let answer
   const currentHanzi = hanziSeq.value.at(-1) ?? "";
-  const pys = getPinyinOf(currentHanzi);
 
-  console.log(currentHanzi, pys);
-  console.log("answer", pys.at(0) ?? "");
-  console.log("xh code", store.mode().py2sp.get(pys.at(0) ?? "") ?? "");
-  console.log("moqi code", moqiCodeMap.getCode(currentHanzi));
-  console.log("moqi getShapes", moqiCodeMap.getShapes(currentHanzi));
-  console.log("moqi getFullSplit", moqiCodeMap.getFullSplit(currentHanzi));
+  // 根据不同模式获取拼音
+  let pys: string[];
+  if (props.isBujianMode && props.getBujianPinyin) {
+    // 部件模式下使用专用方法获取拼音
+    pys = props.getBujianPinyin(currentHanzi);
+  } else {
+    // 其他模式使用默认的拼音获取方法
+    pys = getPinyinOf(currentHanzi);
+  }
+
+  // console.log(currentHanzi, pys);
+  // console.log("answer", pys.at(0) ?? "");
+  // console.log("xh code", store.mode().py2sp.get(pys.at(0) ?? "") ?? "");
+  // console.log("moqi code", moqiCodeMap.getCode(currentHanzi));
+  // console.log("moqi getShapes", moqiCodeMap.getShapes(currentHanzi));
+  // console.log("moqi getFullSplit", moqiCodeMap.getFullSplit(currentHanzi));
 
   if (settings.value.enableMoqiCode) {
     // 墨奇模式下的答案处理
@@ -156,17 +167,47 @@ const currentMap = computed(() => {
 
 // 获取键盘提示
 const hints = computed(() => {
+  if (props.isBujianMode) {
+    // 部件模式下只需要提示第一个字母
+    const answer = currentMap.value.answer;
+    // console.log("hint answer", answer);
+    return answer ? [answer[0].toLowerCase()] : [];
+  }
+
   if (settings.value.enableMoqiCode) {
     // 墨奇模式下显示完整的4字母提示
     return currentMap.value.answer.split("");
   }
+
   // 原有模式的提示处理
-  console.log("hint", currentMap.value.answer.split(""), (store.mode().py2sp.get(currentMap.value.answer) ?? "").split(""));
+  // console.log("hint", currentMap.value.answer.split(""), (store.mode().py2sp.get(currentMap.value.answer) ?? "").split(""));
   return (store.mode().py2sp.get(currentMap.value.answer) ?? "").split("");
 });
 
 // 处理输入序列
 function onSeq([lead, follow, firstShape, lastShape]: [string?, string?, string?, string?]) {
+  // 部件练习模式处理逻辑
+  if (props.isBujianMode) {
+    const currentHanzi = hanziSeq.value.at(-1) ?? "";
+    // 使用专用的部件拼音获取方法
+    const pys = props.getBujianPinyin ? props.getBujianPinyin(currentHanzi) : [];
+    // 部件练习模式下只需验证单一键位
+    const expectedKey = pys.at(0)?.[0]?.toLowerCase() ?? "";
+    const input = lead ?? "";
+
+    pinyin.value = input ? [input] : [];
+
+    const valid = input.toLowerCase() === expectedKey;
+
+    if (input) {
+      props.onValidInput?.(valid);
+      summary.value.onValid(valid);
+      isValid.value = valid;
+    }
+
+    return valid;
+  }
+
   if (settings.value.enableMoqiCode) {
     // 墨奇模式下的输入处理
     const input = (lead ?? "") + (follow ?? "") + (firstShape ?? "") + (lastShape ?? "");
@@ -183,7 +224,7 @@ function onSeq([lead, follow, firstShape, lastShape]: [string?, string?, string?
       isValid.value = valid;
     }
 
-    console.log("onSeq moqi", input, expectedAnswer, fullInput, pinyin.value);
+    // console.log("onSeq moqi", input, expectedAnswer, fullInput, pinyin.value);
 
     return fullInput ? input === expectedAnswer : false;
   }
@@ -210,7 +251,7 @@ function onSeq([lead, follow, firstShape, lastShape]: [string?, string?, string?
 
   isValid.value = res.valid;
 
-  console.log("onSeq", res, pinyin.value, fullInput);
+  // console.log("onSeq", res, pinyin.value, fullInput);
 
   return res.valid;
 }
@@ -256,12 +297,15 @@ watchPostEffect(() => {
       </div>
 
       <div class="hanzi-list">
-        <Hanzi :hanzi-seq="[...hanziSeq]" />
+        <Hanzi
+          :hanzi-seq="[...hanziSeq]"
+          :is-bujian-mode="props.isBujianMode"
+          :get-bujian-pinyin="props.getBujianPinyin" />
       </div>
     </div>
 
     <div class="single-keyboard">
-      <Keyboard :valid-seq="onSeq" :hints="hints" />
+      <Keyboard :valid-seq="onSeq" :hints="hints" :is-bujian-mode="props.isBujianMode" />
     </div>
 
     <div class="summary">

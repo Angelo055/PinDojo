@@ -6,6 +6,8 @@ import { randomChoice } from "../utils/number";
 
 const props = defineProps<{
   hanziSeq: string[];
+  isBujianMode?: boolean;
+  getBujianPinyin?: (bujian: string) => string[];
 }>();
 
 const pinyin = ref("");
@@ -20,7 +22,14 @@ function togglePinyin(show: boolean) {
 effect(() => {
   // eslint-disable-next-line vue/no-mutating-props
   currentHanzi.value = props.hanziSeq.pop();
-  pinyin.value = getPinyinOf(currentHanzi.value).at(0) ?? "";
+
+  // 根据模式选择获取拼音的方法
+  if (props.isBujianMode && props.getBujianPinyin) {
+    const pys = props.getBujianPinyin(currentHanzi.value);
+    pinyin.value = pys.at(0) ?? "";
+  } else {
+    pinyin.value = getPinyinOf(currentHanzi.value).at(0) ?? "";
+  }
 });
 </script>
 
