@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SingleMode from '../components/SingleMode.vue';
 import { ref, onMounted } from 'vue';
+import { hanziList } from '../utils/hanzi';
 import hanzi_bujian from '../utils/hanzi_bujian.json';
 
 // 构建部件Map
@@ -49,6 +50,7 @@ function validateSingleKey(result: boolean) {
 <template>
   <single-mode
     :next-char="nextChar"
+    :hanzi-list="hanziList.hanzi"
     :on-valid-input="validateSingleKey"
     :is-bujian-mode="true"
     :get-bujian-pinyin="getBujianPinyin" />

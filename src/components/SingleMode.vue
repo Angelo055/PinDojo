@@ -145,6 +145,8 @@ const currentMap = computed(() => {
   // console.log("moqi code", moqiCodeMap.getCode(currentHanzi));
   // console.log("moqi getShapes", moqiCodeMap.getShapes(currentHanzi));
   // console.log("moqi getFullSplit", moqiCodeMap.getFullSplit(currentHanzi));
+  // console.log("hanziList", props.hanziList);
+  console.log("moqi getCharCollection", moqiCodeMap.getCharCollection(currentHanzi, props.hanziList ?? []));
 
   if (settings.value.enableMoqiCode) {
     // 墨奇模式下的答案处理
@@ -162,6 +164,7 @@ const currentMap = computed(() => {
     answer,
     codeShapes: moqiCodeMap.getShapes(currentHanzi),
     fullSplit: moqiCodeMap.getFullSplit(currentHanzi),
+    getCharCollection: props.hanziList ? moqiCodeMap.getCharCollection(currentHanzi, props.hanziList) : { firstShape: [], endShape: [] },
   }
 });
 
@@ -285,7 +288,7 @@ watchPostEffect(() => {
 
     <div class="hanzi-info">
       <!-- 墨奇模式下的提示显示 -->
-      <div v-if="settings.enableMoqiCode" class="moqi-hint">
+      <div v-if="!props.isBujianMode && settings.enableMoqiCode" class="top-hint">
         <div class="hint-row">
           <span class="hint-label">辅助码:</span>
           <span class="hint-content first">{{ currentMap.answer.slice(2, 4) }}</span>
@@ -293,6 +296,17 @@ watchPostEffect(() => {
           <span class="hint-content second">{{ currentMap.codeShapes }}</span>
           <span class="hint-label">拆分:</span>
           <span class="hint-content">{{ currentMap.fullSplit }}</span>
+        </div>
+      </div>
+      <!-- 部件练习模式下的提示显示 -->
+      <div v-if="props.isBujianMode" class="top-hint bujian-mode">
+        <div class="hint-row">
+          <span class="hint-label">常见字例(首):</span>
+          <span class="hint-content">{{ currentMap.getCharCollection?.firstShape.slice(0, 10).join(", ") || 'N/A' }}</span>
+        </div>
+        <div class="hint-row">
+          <span class="hint-label">常见字例(末):</span>
+          <span class="hint-content">{{ currentMap.getCharCollection?.endShape.slice(0, 10).join(", ") || 'N/A' }}</span>
         </div>
       </div>
 
@@ -344,7 +358,7 @@ watchPostEffect(() => {
     align-items: flex-start; // 顶部对齐
     gap: 7rem; // 增加间距
 
-    .moqi-hint {
+    .top-hint {
       display: flex;
       align-items: flex-start; // 左对齐
       gap: 0.5rem;
@@ -352,6 +366,19 @@ watchPostEffect(() => {
       font-weight: bold;
       color: var(--text-light);
       padding-top: 5px; // 微调顶部对齐
+
+      // 针对部件模式添加垂直布局
+      &.bujian-mode {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.8rem;
+
+        .hint-row {
+          width: 100%;
+          margin-bottom: 0;
+          height: 30px;
+        }
+      }
 
       .hint-row {
         display: flex;
@@ -419,7 +446,7 @@ watchPostEffect(() => {
       gap: 1rem;
       padding-top: 90px;
 
-      .moqi-hint {
+      .top-hint {
         display: flex;
         flex-direction:column;
         align-items: center; // 左对齐
@@ -428,11 +455,20 @@ watchPostEffect(() => {
         font-weight: bold;
         color: var(--text-light);
 
+        &.bujian-mode {
+          gap: 0.5rem;
+
+          .hint-row {
+            height: 100px;
+            line-height: 24px;
+          }
+        }
+
         .hint-row {
           display: flex;
           flex-direction: column;
           gap: 0.1rem;
-          align-items:end;
+          align-items: end;
           height: 80px;
           line-height: 32px;
 

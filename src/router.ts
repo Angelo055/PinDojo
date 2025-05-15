@@ -30,7 +30,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/bujian-mode',
-    name: '部件模式',
+    name: '部件练习',
     component: BujianMode
   },
   {

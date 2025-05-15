@@ -68,6 +68,31 @@ class MoqiCodeMap {
     }
     return this.charData.get(char)?.fullSplit || ''
   }
+
+  getCharCollection(
+    bujian: string,
+    hanziList: string[]
+  ): { firstShape: string[]; endShape: string[] } {
+    if (!this.dataLoaded) {
+      console.warn('Moqi data not loaded yet')
+      return { firstShape: [], endShape: [] }
+    }
+    // 获取首末字形为传入bujian的所有字形
+    let charCollection = {
+      firstShape: [] as string[],
+      endShape: [] as string[]
+    }
+    charCollection.firstShape = Array.from(this.charData.entries())
+      .filter(([_, char]) => char.shapes.startsWith(bujian))
+      .map(([character, _]) => character)
+      .filter((char) => hanziList.includes(char))
+    charCollection.endShape = Array.from(this.charData.entries())
+      .filter(([_, char]) => char.shapes.endsWith(bujian))
+      .map(([character, _]) => character)
+      .filter((char) => hanziList.includes(char))
+    // console.log('charCollection', bujian, hanziList, charCollection)
+    return charCollection
+  }
 }
 
 const moqiCodeMap = new MoqiCodeMap()
