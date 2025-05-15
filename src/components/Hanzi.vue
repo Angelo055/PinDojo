@@ -86,7 +86,7 @@ effect(() => {
   }
 
   .follow-item {
-    font-size: 36px;
+    font-size: 52px;
     font-weight: bold;
     margin-right: 10px;
     margin-top: -1px;
@@ -96,7 +96,7 @@ effect(() => {
   }
 
   .current-item {
-    @size: 54px;
+    @size: 90px;
     height: @size;
     width: @size;
 
@@ -117,13 +117,13 @@ effect(() => {
     }
 
     .pinyin {
-      font-size: 14px;
+      font-size: 16px;
       position: absolute;
       top: -1px;
     }
 
     .hanzi {
-      font-size: 36px;
+      font-size:60px;
       font-weight: bold;
     }
   }

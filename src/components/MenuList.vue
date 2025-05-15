@@ -81,7 +81,7 @@ onUnmounted(() => {
   .menu-items {
     transition: all ease 0.3s;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.3em;
     padding: 2em 0;
 
     &:hover {
@@ -89,8 +89,8 @@ onUnmounted(() => {
     }
 
     .menu-item {
-      padding: 0.5em 1.2em;
-      line-height: 1em;
+      padding: 0.5em 1.8em;
+      line-height: 1.5em;
     }
 
     .menu-item:hover {

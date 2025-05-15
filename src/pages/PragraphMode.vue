@@ -408,7 +408,7 @@ function shortPinyin(pinyins: string[]) {
         flex-direction: column;
         align-items: flex-end;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 16px;
 
         .title {
           max-width: 160px;
@@ -423,6 +423,7 @@ function shortPinyin(pinyins: string[]) {
       .article-menu {
         display: none;
         height: 110px;
+        // left: 60px;
       }
     }
 
@@ -471,7 +472,7 @@ function shortPinyin(pinyins: string[]) {
 
     .text-area {
       position: relative;
-      width: 50vw;
+      width: 40vw;
       max-width: calc(0.6 * var(--page-max-width));
 
       @media (max-width: 576px) {
@@ -499,9 +500,9 @@ function shortPinyin(pinyins: string[]) {
 
       .scroll-area {
         overflow-y: scroll;
-        height: 144px;
+        height: 252px;
         position: relative;
-        margin: 8px 0;
+        margin: 18px 0;
 
         @media (max-width: 576px) {
           height: 30vh;
@@ -509,6 +510,7 @@ function shortPinyin(pinyins: string[]) {
 
         .bg-text {
           opacity: 0.4;
+          font-size: 20px;
         }
 
         .done-text {
@@ -542,7 +544,7 @@ function shortPinyin(pinyins: string[]) {
 
         .editing-title {
           font-family: inherit;
-          font-size: 14px;
+          font-size: 24px;
           font-weight: bold;
           border: 0;
           outline: none;
@@ -555,7 +557,7 @@ function shortPinyin(pinyins: string[]) {
 
         .save-btn {
           color: @primary-color;
-          font-size: 14px;
+          font-size: 20px;
           cursor: pointer;
 
           &.disable {
@@ -566,7 +568,7 @@ function shortPinyin(pinyins: string[]) {
 
       .editing-text {
         font-family: inherit;
-        font-size: 14px;
+        font-size: 24px;
         font-weight: bold;
         border: 0;
         outline: none;
@@ -576,7 +578,7 @@ function shortPinyin(pinyins: string[]) {
         border: 3px double var(--gray-6);
         color: var(--black);
         background-color: transparent;
-        padding-left: 10px;
+        padding-left: 20px;
 
         @media (max-width: 576px) {
           height: calc(var(--page-height) - 300px);

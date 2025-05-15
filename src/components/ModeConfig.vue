@@ -360,14 +360,14 @@ function onEditKey(key: string, leads: string[], follows: string[]) {
 .zero-config {
   display: flex;
   justify-content: center;
-  padding: 20px 0;
+  padding: 28px 0;
   @border: 2px double var(--gray-6);
 
   .zero-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: 12px;
+    font-size: 14px;
 
     border-top: @border;
     border-bottom: @border;

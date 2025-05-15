@@ -207,7 +207,7 @@ function editConfig() {
 
   .mode-setting {
     align-items: baseline;
-    max-height: 6em;
+    max-height: 9em;
     margin-bottom: 2px;
 
     .setting-name {

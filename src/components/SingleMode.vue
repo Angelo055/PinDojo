@@ -300,11 +300,11 @@ watchPostEffect(() => {
       <!-- 部件练习模式下的提示显示 -->
       <div v-if="props.isBujianMode" class="top-hint bujian-mode">
         <div class="hint-row">
-          <span class="hint-label">常见字例(首):</span>
+          <span class="hint-label">字例(首):</span>
           <span class="hint-content">{{ currentMap.getCharCollection?.firstShape.slice(0, 10).join(", ") || 'N/A' }}</span>
         </div>
         <div class="hint-row">
-          <span class="hint-label">常见字例(末):</span>
+          <span class="hint-label">字例(末):</span>
           <span class="hint-content">{{ currentMap.getCharCollection?.endShape.slice(0, 10).join(", ") || 'N/A' }}</span>
         </div>
       </div>
@@ -344,7 +344,7 @@ watchPostEffect(() => {
   .single-menu {
     position: absolute;
     top: 0;
-    left: 100px;
+    left: 140px;
   }
 
   .hanzi-info {
@@ -361,10 +361,11 @@ watchPostEffect(() => {
       display: flex;
       align-items: flex-start; // 左对齐
       gap: 0.5rem;
-      font-size: 20px;
+      font-size: 28px;
       font-weight: bold;
       color: var(--text-light);
       padding-top: 5px; // 微调顶部对齐
+      padding-right: 20px;
 
       // 针对部件模式添加垂直布局
       &.bujian-mode {
@@ -375,33 +376,36 @@ watchPostEffect(() => {
         .hint-row {
           width: 100%;
           margin-bottom: 0;
-          height: 30px;
+          height: 50px;
         }
       }
 
       .hint-row {
         display: flex;
-        gap: 0.1rem;
+        gap: 0.2rem;
         align-items: center;
-        height: 80px;
-        line-height: 32px;
+        height: 120px;
+        line-height: 52px;
 
         .hint-label {
           color: var(--text-lighter);
           min-width: 3.5rem; // 固定标签宽度，保证对齐
           text-align: right; // 标签右对齐
           font-family: 'Noto Serif SC', 'Source Han Serif SC', source-han-serif-sc, serif;
-          font-size: 15px;
+          font-size: 20px;
           color: @primary-color;
+          opacity: 0.6;
         }
 
         .hint-content {
-          padding: 0.1em 0.2em;
+          padding: 0.1em 0.4em;
           border-radius: 4px;
           background: var(--bg-light);
+          font-size: 30px;
           font-family: "LXGW WenKai Mono";
           min-width: 5em; // 内容最小宽度
           text-align: left;
+          opacity: 0.85;
         }
 
         .hint-content.first {
@@ -430,7 +434,7 @@ watchPostEffect(() => {
     align-items: center;
 
     @media (max-width: 576px) {
-      margin-top: 18vh;
+      margin-top: 55vh;
     }
   }
 
@@ -453,13 +457,14 @@ watchPostEffect(() => {
         font-size: 14px;
         font-weight: bold;
         color: var(--text-light);
+        padding-right: 0;
 
         &.bujian-mode {
           gap: 0.5rem;
 
           .hint-row {
-            height: 100px;
-            line-height: 24px;
+            height: 130px;
+            line-height: 34px;
           }
         }
 
@@ -476,7 +481,7 @@ watchPostEffect(() => {
             min-width: 3.5rem; // 固定标签宽度，保证对齐
             text-align: right; // 标签右对齐
             font-family: 'Noto Serif SC', 'Source Han Serif SC', source-han-serif-sc, serif;
-            font-size: 12px;
+            font-size: 14px;
             color: @primary-color;
           }
 

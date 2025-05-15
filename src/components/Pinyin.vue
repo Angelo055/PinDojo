@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { computed } from "vue";
 import { defineProps } from "vue";
 
 const props = defineProps<{
@@ -20,7 +19,7 @@ const props = defineProps<{
 .pinyin-input {
   display: flex;
   font-weight: bold;
-  font-size: 60px;
+  font-size: 50px;
   line-height: 1.2;
 
   .cursor {
