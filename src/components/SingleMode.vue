@@ -146,11 +146,10 @@ const currentMap = computed(() => {
   // console.log("moqi getShapes", moqiCodeMap.getShapes(currentHanzi));
   // console.log("moqi getFullSplit", moqiCodeMap.getFullSplit(currentHanzi));
   // console.log("hanziList", props.hanziList);
-  console.log("moqi getCharCollection", moqiCodeMap.getCharCollection(currentHanzi, props.hanziList ?? []));
+  // console.log("moqi getCharCollection", moqiCodeMap.getCharCollection(currentHanzi, props.hanziList ?? []));
 
-  if (settings.value.enableMoqiCode) {
-    // 墨奇模式下的答案处理
-
+  if (settings.value.enableMoqiCode && !props.isBujianMode) {
+    // 仅当墨奇模式下的答案处理
     const pinyinMoqi = pys.at(0) ?? "";
     const shuangpin = store.mode().py2sp.get(pinyinMoqi) ?? "";
     const moqiCode = moqiCodeMap.getCode(currentHanzi);
